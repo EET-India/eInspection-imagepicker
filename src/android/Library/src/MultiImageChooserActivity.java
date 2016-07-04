@@ -166,7 +166,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
         ia = new ImageAdapter(this);
         gridView.setAdapter(ia);
-
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         LoaderManager.enableDebugLogging(false);
         getLoaderManager().initLoader(CURSORLOADER_THUMBS, null, this);
         getLoaderManager().initLoader(CURSORLOADER_REAL, null, this);
