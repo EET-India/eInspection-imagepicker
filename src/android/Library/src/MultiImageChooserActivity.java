@@ -166,7 +166,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
         ia = new ImageAdapter(this);
         gridView.setAdapter(ia);
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+       // getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         LoaderManager.enableDebugLogging(false);
         getLoaderManager().initLoader(CURSORLOADER_THUMBS, null, this);
         getLoaderManager().initLoader(CURSORLOADER_REAL, null, this);
@@ -175,6 +175,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         progress = new ProgressDialog(this);
         progress.setTitle("Processing Images");
         progress.setMessage("This may take a few moments please wait");
+         progress.setCanceledOnTouchOutside(false);
     }
     
     @Override
