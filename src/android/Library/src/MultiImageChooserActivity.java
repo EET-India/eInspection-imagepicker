@@ -124,7 +124,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         fakeR = new FakeR(this);
         setContentView(fakeR.getId("layout", "multiselectorgrid"));
         fileNames.clear();
-       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR); 
+       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR); 
      //  MultiImageChooserActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
        //  this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         maxImages = getIntent().getIntExtra(MAX_IMAGES_KEY, NOLIMIT);
