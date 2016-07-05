@@ -126,7 +126,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         fileNames.clear();
        // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR); 
      //  MultiImageChooserActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+       //  this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         maxImages = getIntent().getIntExtra(MAX_IMAGES_KEY, NOLIMIT);
         desiredWidth = getIntent().getIntExtra(WIDTH_KEY, 0);
         desiredHeight = getIntent().getIntExtra(HEIGHT_KEY, 0);
