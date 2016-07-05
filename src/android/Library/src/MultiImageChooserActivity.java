@@ -117,7 +117,10 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
     private FakeR fakeR;
     
     private ProgressDialog progress;
-
+@Override
+public void onBackPressed()
+{// super.onBackPressed(); // Comment this super call to avoid calling finish()
+}
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
