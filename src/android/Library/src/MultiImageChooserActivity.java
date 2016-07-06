@@ -122,20 +122,6 @@ public void onBackPressed()
 {// super.onBackPressed(); // Comment this super call to avoid calling finish()
 
 }
-progress.setOnKeyListener(new Dialog.OnKeyListener() {
-
-            @Override
-            public boolean onKey(DialogInterface arg0, int keyCode,
-                    KeyEvent event) {
-                // TODO Auto-generated method stub
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    finish();
-                    dialog.dismiss();
-                }
-                return true;
-            }
-        });
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,6 +181,19 @@ progress.setOnKeyListener(new Dialog.OnKeyListener() {
         progress.setTitle("Processing Images");
         progress.setMessage("This may take few moment");
          progress.setCanceledOnTouchOutside(false);
+         progress.setOnKeyListener(new Dialog.OnKeyListener() {
+
+            @Override
+            public boolean onKey(DialogInterface arg0, int keyCode,
+                    KeyEvent event) {
+                // TODO Auto-generated method stub
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    finish();
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
 	
     }
     
