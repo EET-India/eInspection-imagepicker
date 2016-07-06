@@ -180,7 +180,7 @@ public void onBackPressed()
         progress.setTitle("Processing Images");
         progress.setMessage("This may take few moment");
          progress.setCanceledOnTouchOutside(false);
-         progress.setCancelable(true)
+         progress.setCancelable(false);
     }
     
     @Override
