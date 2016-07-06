@@ -67,8 +67,6 @@ import android.util.SparseBooleanArray;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnKeyListener;
-import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -79,7 +77,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MultiImageChooserActivity extends Activity implements OnItemClickListener,
+public class MultiImageChooserActivity extends Activity implements OnItemClickListener, OnKeyListener,
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ImagePicker";
 
@@ -124,7 +122,19 @@ public void onBackPressed()
 {// super.onBackPressed(); // Comment this super call to avoid calling finish()
 
 }
+progress.setOnKeyListener(new Dialog.OnKeyListener() {
 
+            @Override
+            public boolean onKey(DialogInterface arg0, int keyCode,
+                    KeyEvent event) {
+                // TODO Auto-generated method stub
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    finish();
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,6 +181,7 @@ public void onBackPressed()
                 }
             }
         });
+        
 
         ia = new ImageAdapter(this);
         gridView.setAdapter(ia);
@@ -184,18 +195,6 @@ public void onBackPressed()
         progress.setTitle("Processing Images");
         progress.setMessage("This may take few moment");
          progress.setCanceledOnTouchOutside(false);
-         // Disable the back button
-	OnKeyListener keyListener = new OnKeyListener() {
-
-		@Override
-		public boolean onKey(DialogInterface progress, int keyCode,
-				KeyEvent event) {
-
-               return keyCode == KeyEvent.KEYCODE_BACK;
-           }
-	
-	};
-	progress.setOnKeyListener(keyListener);
 	
     }
     
