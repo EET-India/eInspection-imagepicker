@@ -77,7 +77,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MultiImageChooserActivity extends Activity implements OnItemClickListener, OnKeyListener,
+public class MultiImageChooserActivity extends Activity implements OnItemClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ImagePicker";
 
