@@ -120,7 +120,10 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 @Override
 public void onBackPressed()
 {// super.onBackPressed(); // Comment this super call to avoid calling finish()
+
 }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,6 +182,19 @@ public void onBackPressed()
         progress.setTitle("Processing Images");
         progress.setMessage("This may take few moment");
          progress.setCanceledOnTouchOutside(false);
+         // Disable the back button
+	OnKeyListener keyListener = new OnKeyListener() {
+
+		@Override
+		public boolean onKey(DialogInterface progress, int keyCode,
+				KeyEvent event) {
+
+               return keyCode == KeyEvent.KEYCODE_BACK;
+           }
+	
+	};
+	progress.setOnKeyListener(keyListener);
+	
     }
     
     @Override
