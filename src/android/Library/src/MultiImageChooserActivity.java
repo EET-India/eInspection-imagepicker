@@ -181,20 +181,7 @@ public void onBackPressed()
         progress.setTitle("Processing Images");
         progress.setMessage("This may take few moment");
          progress.setCanceledOnTouchOutside(false);
-         progress.setOnKeyListener(new ProgressDialog.OnKeyListener() {
-
-            @Override
-            public boolean onKey(DialogInterface arg0, int keyCode,
-                    KeyEvent event) {
-                // TODO Auto-generated method stub
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    finish();
-                    dialog.dismiss();
-                }
-                return true;
-            }
-        });
-	
+        
     }
     
     @Override
