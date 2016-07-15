@@ -254,9 +254,8 @@ public void onBackPressed()
         }
 
         cl = new CursorLoader(MultiImageChooserActivity.this, MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-               img.toArray(new String[img.size()]), null, null, "ID DESC");
-              // img.toArray(new String[img.size()]), null, null, "DATE_MODIFIED DESC");
-             // img.toArray(new String[img.size()]));
+             //  img.toArray(new String[img.size()]), null, null, "ID DESC");
+              img.toArray(new String[img.size()]), null, null, "DATE_MODIFIED DESC");
         return cl;
     }
 
