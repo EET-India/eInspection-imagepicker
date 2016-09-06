@@ -57,7 +57,7 @@
                     [self.assetGroups insertObject:group atIndex:0];
                 }
                 else {
-                    [self.assetGroups addObject:group];
+                 //   [self.assetGroups addObject:group];
                 }
 
                 // Reload albums
@@ -86,6 +86,9 @@
 {
 	[self.tableView reloadData];
 	[self.navigationItem setTitle:@"Select an Album"];
+	
+	NSIndexPath *myIP = [NSIndexPath indexPathForRow:0 inSection:0] ;
+	[self tablieView:self.tableView didSelectRowAtIndexPath:myIP];
 }
 
 - (BOOL)shouldSelectAsset:(ELCAsset *)asset previousCount:(NSUInteger)previousCount
