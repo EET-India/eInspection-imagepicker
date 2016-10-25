@@ -36,6 +36,7 @@ public class ImagePicker extends CordovaPlugin {
             try {
                 if (!PermissionHelper.hasPermission(this, permissions[0])) {
                     PermissionHelper.requestPermission(this, 1, Manifest.permission.READ_EXTERNAL_STORAGE);
+                    return false;
                 } else {
                     Intent intent = new Intent(cordova.getActivity(), MultiImageChooserActivity.class);
                     int max = 20;
