@@ -36,9 +36,7 @@ public class ImagePicker extends CordovaPlugin {
 			catch (IllegalArgumentException e)
 			{
 				callbackContext.error("Illegal Argument Exception");
-				PluginResult r = new PluginResult(PluginResult.Status.ERROR);
-				callbackContext.sendPluginResult(r);
-				return true;
+				return false;
 			}
 			
 			Intent intent = new Intent(cordova.getActivity(), MultiImageChooserActivity.class);
