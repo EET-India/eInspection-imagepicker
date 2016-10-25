@@ -3,6 +3,7 @@
  */
 package com.synconset;
 
+import org.apache.cordova.PermissionHelper;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 
@@ -25,7 +26,21 @@ public class ImagePicker extends CordovaPlugin {
 	public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
 		 this.callbackContext = callbackContext;
 		 this.params = args.getJSONObject(0);
+		protected final static String[] permissions = { Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE };
 		if (action.equals("getPictures")) {
+			try {
+			       if(!PermissionHelper.hasPermission(this, permissions[0])) {
+				 PermissionHelper.requestPermission(this, 1, Manifest.permission.READ_EXTERNAL_STORAGE);
+			   }
+			}
+			catch (IllegalArgumentException e)
+			{
+				callbackContext.error("Illegal Argument Exception");
+				PluginResult r = new PluginResult(PluginResult.Status.ERROR);
+				callbackContext.sendPluginResult(r);
+				return true;
+			}
+			
 			Intent intent = new Intent(cordova.getActivity(), MultiImageChooserActivity.class);
 			int max = 20;
 			int desiredWidth = 0;
