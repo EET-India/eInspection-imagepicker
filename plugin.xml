@@ -70,8 +70,7 @@
 		</config-file>
 		
 		<config-file target="AndroidManifest.xml" parent="/*">
-		    <permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-		    <permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+		    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 		</config-file>
 
 		<source-file src="src/android/com/synconset/ImagePicker/ImagePicker.java" target-dir="src/com/synconset" />
