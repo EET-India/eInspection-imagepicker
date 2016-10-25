@@ -30,10 +30,8 @@ public class ImagePicker extends CordovaPlugin {
 		 this.params = args.getJSONObject(0);
 		
 		if (action.equals("getPictures")) {
-			try {
-			       
+			try {	       
 				 PermissionHelper.requestPermission(this, 1, Manifest.permission.READ_EXTERNAL_STORAGE);
-			   }
 			}
 			catch (IllegalArgumentException e)
 			{
