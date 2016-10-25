@@ -32,38 +32,39 @@ public class ImagePicker extends CordovaPlugin {
         this.params = args.getJSONObject(0);
 
         if (action.equals("getPictures")) {
-            Intent intent = new Intent(cordova.getActivity(), MultiImageChooserActivity.class);
-            int max = 20;
-            int desiredWidth = 0;
-            int desiredHeight = 0;
-            int quality = 100;
-            if (this.params.has("maximumImagesCount")) {
-                max = this.params.getInt("maximumImagesCount");
-            }
-            if (this.params.has("width")) {
-                desiredWidth = this.params.getInt("width");
-            }
-            if (this.params.has("height")) {
-                desiredHeight = this.params.getInt("height");
-            }
-            if (this.params.has("quality")) {
-                quality = this.params.getInt("quality");
-            }
-            intent.putExtra("MAX_IMAGES", max);
-            intent.putExtra("WIDTH", desiredWidth);
-            intent.putExtra("HEIGHT", desiredHeight);
-            intent.putExtra("QUALITY", quality);
-            if (this.cordova != null) {
-                try {
-                    if (!PermissionHelper.hasPermission(this, permissions[0])) {
-                        PermissionHelper.requestPermission(this, 1, Manifest.permission.READ_EXTERNAL_STORAGE);
-                    } else {
+
+            try {
+                if (!PermissionHelper.hasPermission(this, permissions[0])) {
+                    PermissionHelper.requestPermission(this, 1, Manifest.permission.READ_EXTERNAL_STORAGE);
+                } else {
+                    Intent intent = new Intent(cordova.getActivity(), MultiImageChooserActivity.class);
+                    int max = 20;
+                    int desiredWidth = 0;
+                    int desiredHeight = 0;
+                    int quality = 100;
+                    if (this.params.has("maximumImagesCount")) {
+                        max = this.params.getInt("maximumImagesCount");
+                    }
+                    if (this.params.has("width")) {
+                        desiredWidth = this.params.getInt("width");
+                    }
+                    if (this.params.has("height")) {
+                        desiredHeight = this.params.getInt("height");
+                    }
+                    if (this.params.has("quality")) {
+                        quality = this.params.getInt("quality");
+                    }
+                    intent.putExtra("MAX_IMAGES", max);
+                    intent.putExtra("WIDTH", desiredWidth);
+                    intent.putExtra("HEIGHT", desiredHeight);
+                    intent.putExtra("QUALITY", quality);
+                    if (this.cordova != null) {
                         this.cordova.startActivityForResult((CordovaPlugin) this, intent, 0);
                     }
-                } catch (IllegalArgumentException e) {
-                    callbackContext.error("Illegal Argument Exception");
-                    return false;
                 }
+            } catch (IllegalArgumentException e) {
+                callbackContext.error("Illegal Argument Exception");
+                return false;
             }
         }
         return true;
