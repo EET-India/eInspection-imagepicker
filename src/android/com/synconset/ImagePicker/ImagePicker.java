@@ -4,6 +4,8 @@
 package com.synconset;
 
 import org.apache.cordova.PermissionHelper;
+import android.Manifest;
+import android.content.pm.PermissionInfo;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 
