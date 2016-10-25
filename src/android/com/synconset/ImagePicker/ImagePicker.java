@@ -28,10 +28,10 @@ public class ImagePicker extends CordovaPlugin {
 	public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
 		 this.callbackContext = callbackContext;
 		 this.params = args.getJSONObject(0);
-		protected final static String[] permissions = { Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE };
+		
 		if (action.equals("getPictures")) {
 			try {
-			       if(!PermissionHelper.hasPermission(this, permissions[0])) {
+			       
 				 PermissionHelper.requestPermission(this, 1, Manifest.permission.READ_EXTERNAL_STORAGE);
 			   }
 			}
