@@ -77,7 +77,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-// For ActivityInfo
+// For ActivityInfo object used for screen orientation.
 // By - Divya Sakpal
 import android.content.pm.ActivityInfo;
 
@@ -167,7 +167,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
     private void proceedLoading(){
         fileNames.clear();
-        // For orientation of the gallery on device.
+        // Set the orientation of the gallery on device.
         // By - Divya Sakpal
        (MultiImageChooserActivity.this).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         maxImages = getIntent().getIntExtra(MAX_IMAGES_KEY, NOLIMIT);
