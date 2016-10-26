@@ -77,6 +77,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+// For Android 6.0 above permission check.
+// - Aishvarya Bhor
 import android.os.Build;
 import android.content.pm.PackageManager;
 import android.Manifest;
@@ -122,13 +124,23 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
     private FakeR fakeR;
     private ProgressDialog progress;
-
+ 
+   // Disable the back button.
+   // By - Divya Sakpal
+   @Override
+   public void onBackPressed()
+   {// super.onBackPressed(); 
+    // Comment this super call to avoid calling finish()
+   }
+          
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fakeR = new FakeR(this);
         setContentView(fakeR.getId("layout", "multiselectorgrid"));
 
+        // For checking permissions for Android 6.0 above.
+        // By- Aishvarya Bhor
         boolean permission_granted = true;
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -200,8 +212,14 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         setupHeader();
         updateAcceptButton();
         progress = new ProgressDialog(this);
+        // Changed the progress message.
+        // By- Divya Sakpal.
         progress.setTitle("Processing Images");
         progress.setMessage("This may take a few moments");
+        // Following code disables the background click after selecting images.
+        // - By Divya Sakpal
+        progress.setCanceledOnTouchOutside(false);
+        progress.setCancelable(false);
     }
 
     @Override
@@ -721,6 +739,8 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         return scale;
     }
 
+    // Result on clicking deny OR allow .
+    // By - Aishvarya Bhor
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (requestCode == 1001){
