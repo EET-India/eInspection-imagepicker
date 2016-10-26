@@ -3,25 +3,25 @@
  *
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following  conditions are met:
  *
- *   Redistributions of source code must retain the above copyright notice, 
+ *   Redistributions of source code must retain the above copyright notice,
  *      this list of conditions and the following disclaimer.
- *   Redistributions in binary form must reproduce the above copyright notice, 
- *      this list of conditions and the following  disclaimer in the 
+ *   Redistributions in binary form must reproduce the above copyright notice,
+ *      this list of conditions and the following  disclaimer in the
  *      documentation and/or other materials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,  BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT  SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR  BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDIN G NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,  BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT  SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR  BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDIN G NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH  DAMAGE
  *
  * Code modified by Andrew Stephan for Sync OnSet
@@ -41,7 +41,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import android.content.pm.ActivityInfo;
+
 import com.synconset.FakeR;
 import android.app.Activity;
 import android.app.ActionBar;
@@ -77,6 +77,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import android.os.Build;
+import android.content.pm.PackageManager;
+import android.Manifest;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MultiImageChooserActivity extends Activity implements OnItemClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ImagePicker";
@@ -102,7 +108,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
     private int maxImages;
     private int maxImageCount;
-    
+
     private int desiredWidth;
     private int desiredHeight;
     private int quality;
@@ -113,21 +119,39 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
     private int selectedColor = 0xff32b2e1;
     private boolean shouldRequestThumb = true;
-    
+
     private FakeR fakeR;
-    
     private ProgressDialog progress;
-@Override
-public void onBackPressed()
-{// super.onBackPressed(); // Comment this super call to avoid calling finish()
-}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fakeR = new FakeR(this);
         setContentView(fakeR.getId("layout", "multiselectorgrid"));
+
+        boolean permission_granted = true;
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            int hasReadExternalStoragePermission = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            List<String> m_permissions = new ArrayList<String>();
+            if (hasReadExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                m_permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+                permission_granted = false;
+            }
+            if (m_permissions.size() > 0){
+                String[] m_permissions_string = new String[m_permissions.size()];
+                m_permissions.toArray(m_permissions_string);
+                requestPermissions(m_permissions_string, 1001);
+            }
+        }
+        if (permission_granted){
+            proceedLoading();
+        }
+    }
+
+    private void proceedLoading(){
         fileNames.clear();
-      (MultiImageChooserActivity.this).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         maxImages = getIntent().getIntExtra(MAX_IMAGES_KEY, NOLIMIT);
         desiredWidth = getIntent().getIntExtra(WIDTH_KEY, 0);
         desiredHeight = getIntent().getIntExtra(HEIGHT_KEY, 0);
@@ -136,7 +160,7 @@ public void onBackPressed()
 
         Display display = getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
-        
+
         colWidth = width / 4;
 
         gridView = (GridView) findViewById(fakeR.getId("id", "gridview"));
@@ -166,11 +190,10 @@ public void onBackPressed()
                 }
             }
         });
-        
 
         ia = new ImageAdapter(this);
         gridView.setAdapter(ia);
-         //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         LoaderManager.enableDebugLogging(false);
         getLoaderManager().initLoader(CURSORLOADER_THUMBS, null, this);
         getLoaderManager().initLoader(CURSORLOADER_REAL, null, this);
@@ -178,11 +201,9 @@ public void onBackPressed()
         updateAcceptButton();
         progress = new ProgressDialog(this);
         progress.setTitle("Processing Images");
-        progress.setMessage("This may take few moment");
-         progress.setCanceledOnTouchOutside(false);
-         progress.setCancelable(false);
+        progress.setMessage("This may take a few moments");
     }
-    
+
     @Override
     public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
         String name = getImageName(position);
@@ -198,7 +219,7 @@ public void onBackPressed()
             builder.setTitle("Maximum " + maxImageCount + " Photos");
             builder.setMessage("You can only select " + maxImageCount + " photos at a time.");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) { 
+                public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
             });
@@ -212,9 +233,9 @@ public void onBackPressed()
                 maxImages--;
                 ImageView imageView = (ImageView)view;
                 if (android.os.Build.VERSION.SDK_INT>=16) {
-                  imageView.setImageAlpha(128);
+                    imageView.setImageAlpha(128);
                 } else {
-                  imageView.setAlpha(128);
+                    imageView.setAlpha(128);
                 }
                 view.setBackgroundColor(selectedColor);
             }
@@ -241,21 +262,20 @@ public void onBackPressed()
         ArrayList<String> img = new ArrayList<String>();
         switch (cursorID) {
 
-        case CURSORLOADER_THUMBS:
-            img.add(MediaStore.Images.Media._ID);
-            img.add(MediaStore.Images.Media.ORIENTATION);
-            break;
-        case CURSORLOADER_REAL:
-            img.add(MediaStore.Images.Thumbnails.DATA);
-            img.add(MediaStore.Images.Media.ORIENTATION);
-            break;
-        default:
-            break;
+            case CURSORLOADER_THUMBS:
+                img.add(MediaStore.Images.Media._ID);
+                img.add(MediaStore.Images.Media.ORIENTATION);
+                break;
+            case CURSORLOADER_REAL:
+                img.add(MediaStore.Images.Thumbnails.DATA);
+                img.add(MediaStore.Images.Media.ORIENTATION);
+                break;
+            default:
+                break;
         }
 
         cl = new CursorLoader(MultiImageChooserActivity.this, MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-             //  img.toArray(new String[img.size()]), null, null, "ID DESC");
-              img.toArray(new String[img.size()]), null, null, "DATE_MODIFIED DESC");
+                img.toArray(new String[img.size()]), null, null, "DATE_MODIFIED DESC");
         return cl;
     }
 
@@ -292,7 +312,7 @@ public void onBackPressed()
             actualimagecursor = null;
         }
     }
-    
+
     public void cancelClicked(View ignored) {
         setResult(RESULT_CANCELED);
         finish();
@@ -311,8 +331,8 @@ public void onBackPressed()
             new ResizeImagesTask().execute(fileNames.entrySet());
         }
     }
-    
-    
+
+
     /*********************
      * Helper Methods
      ********************/
@@ -377,7 +397,7 @@ public void onBackPressed()
         }
         return name;
     }
-    
+
     private int getImageRotation(int position) {
         actualimagecursor.moveToPosition(position);
         int rotation = 0;
@@ -389,28 +409,28 @@ public void onBackPressed()
         }
         return rotation;
     }
-    
+
     public boolean isChecked(int position) {
         boolean ret = checkStatus.get(position);
         return ret;
     }
 
-    
+
     /*********************
-    * Nested Classes
-    ********************/
+     * Nested Classes
+     ********************/
     private class SquareImageView extends ImageView {
         public SquareImageView(Context context) {
-			super(context);
-		}
+            super(context);
+        }
 
-		@Override
+        @Override
         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, widthMeasureSpec);
         }
     }
-    
-    
+
+
     private class ImageAdapter extends BaseAdapter {
         private final Bitmap mPlaceHolderBitmap;
 
@@ -465,16 +485,16 @@ public void onBackPressed()
             final int rotate = imagecursor.getInt(image_column_orientation);
             if (isChecked(pos)) {
                 if (android.os.Build.VERSION.SDK_INT>=16) {
-                  imageView.setImageAlpha(128);
+                    imageView.setImageAlpha(128);
                 } else {
-                  imageView.setAlpha(128);	
+                    imageView.setAlpha(128);
                 }
                 imageView.setBackgroundColor(selectedColor);
             } else {
                 if (android.os.Build.VERSION.SDK_INT>=16) {
-                  imageView.setImageAlpha(255);
+                    imageView.setImageAlpha(255);
                 } else {
-                  imageView.setAlpha(255);	
+                    imageView.setAlpha(255);
                 }
                 imageView.setBackgroundColor(Color.TRANSPARENT);
             }
@@ -485,8 +505,8 @@ public void onBackPressed()
             return imageView;
         }
     }
-    
-    
+
+
     private class ResizeImagesTask extends AsyncTask<Set<Entry<String, Integer>>, Void, ArrayList<String>> {
         private Exception asyncTaskError = null;
 
@@ -563,7 +583,7 @@ public void onBackPressed()
                 }
             }
         }
-        
+
         @Override
         protected void onPostExecute(ArrayList<String> al) {
             Intent data = new Intent();
@@ -610,11 +630,11 @@ public void onBackPressed()
             }
             return bmp;
         }
-        
+
         /*
         * The following functions are originally from
         * https://github.com/raananw/PhoneGap-Image-Resizer
-        * 
+        *
         * They have been modified by Andrew Stephan for Sync OnSet
         *
         * The software is open source, MIT Licensed.
@@ -635,7 +655,7 @@ public void onBackPressed()
             outStream.close();
             return file;
         }
-    
+
         private Bitmap getResizedBitmap(Bitmap bm, float factor) {
             int width = bm.getWidth();
             int height = bm.getHeight();
@@ -648,24 +668,24 @@ public void onBackPressed()
             return resizedBitmap;
         }
     }
-    
+
     private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
-    
+
         if (height > reqHeight || width > reqWidth) {
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
-    
+
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
             while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
                 inSampleSize *= 2;
             }
         }
-    
+
         return inSampleSize;
     }
 
@@ -673,7 +693,7 @@ public void onBackPressed()
         double logBaseTwo = (int)(Math.log(sampleSize) / Math.log(2));
         return (int)Math.pow(logBaseTwo + 1, 2);
     }
-    
+
     private float calculateScale(int width, int height) {
         float widthScale = 1.0f;
         float heightScale = 1.0f;
@@ -697,7 +717,19 @@ public void onBackPressed()
                 }
             }
         }
-        
+
         return scale;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == 1001){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                proceedLoading();
+            } else {
+                finish();
+            }
+            return;
+        }
     }
 }
