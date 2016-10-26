@@ -163,6 +163,8 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
     private void proceedLoading(){
         fileNames.clear();
+        // For orientation of the gallery on device.
+        // By - Divya Sakpal
         (MultiImageChooserActivity.this).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         maxImages = getIntent().getIntExtra(MAX_IMAGES_KEY, NOLIMIT);
         desiredWidth = getIntent().getIntExtra(WIDTH_KEY, 0);
