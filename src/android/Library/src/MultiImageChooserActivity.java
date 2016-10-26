@@ -79,7 +79,7 @@ import android.widget.TextView;
 
 // For ActivityInfo
 // By - Divya Sakpal
-import android.content.pm.ActivityInfo
+import android.content.pm.ActivityInfo;
 
 // For Android 6.0 above permission check.
 // - Aishvarya Bhor
