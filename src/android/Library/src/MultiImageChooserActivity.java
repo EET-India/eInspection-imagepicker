@@ -142,7 +142,8 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         // For orientation of the gallery on device.
         // By - Divya Sakpal
         //(MultiImageChooserActivity.this).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+          this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            
         // For checking permissions for Android 6.0 above.
         // By- Aishvarya Bhor
         boolean permission_granted = true;
