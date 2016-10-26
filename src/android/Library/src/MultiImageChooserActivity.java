@@ -77,6 +77,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+// For ActivityInfo
+// By - Divya Sakpal
+import android.content.pm.ActivityInfo
+
 // For Android 6.0 above permission check.
 // - Aishvarya Bhor
 import android.os.Build;
@@ -138,12 +142,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         super.onCreate(savedInstanceState);
         fakeR = new FakeR(this);
         setContentView(fakeR.getId("layout", "multiselectorgrid"));
-            
-        // For orientation of the gallery on device.
-        // By - Divya Sakpal
-        //(MultiImageChooserActivity.this).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-          this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            
+   
         // For checking permissions for Android 6.0 above.
         // By- Aishvarya Bhor
         boolean permission_granted = true;
@@ -168,6 +167,9 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
     private void proceedLoading(){
         fileNames.clear();
+        // For orientation of the gallery on device.
+        // By - Divya Sakpal
+       (MultiImageChooserActivity.this).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         maxImages = getIntent().getIntExtra(MAX_IMAGES_KEY, NOLIMIT);
         desiredWidth = getIntent().getIntExtra(WIDTH_KEY, 0);
         desiredHeight = getIntent().getIntExtra(HEIGHT_KEY, 0);
